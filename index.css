@@ -277,3 +277,74 @@
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; }
   }
+
+  /* ---------- Ficha individual (/catalogo/[id]) ---------- */
+  .ficha{ padding:40px 0 80px; }
+  .ficha-back{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono'; font-size:12.5px; letter-spacing:.04em;
+    color:var(--steel); text-transform:uppercase; margin-bottom:20px;
+  }
+  .ficha-back:hover{ color:var(--rust); }
+
+  /* Panel oscuro: misma estética "nameplate" que las tarjetas del catálogo,
+     así .spec-rows / .spec / .price (pensados para fondo oscuro) se reusan tal cual */
+  .ficha-panel{
+    background:var(--charcoal);
+    border-radius:6px;
+    display:grid; grid-template-columns:1.05fr 0.95fr;
+    overflow:hidden;
+  }
+  @media (max-width:900px){ .ficha-panel{ grid-template-columns:1fr; } }
+
+  /* Galería: imagen principal + miniaturas */
+  .ficha-galeria{ padding:26px; }
+  .galeria-main{
+    aspect-ratio:4/3;
+    background:
+      linear-gradient(180deg, rgba(232,163,61,0.06), rgba(232,163,61,0) 60%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 14px),
+      var(--charcoal-2);
+    border-radius:4px;
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .galeria-main img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .galeria-main svg{ width:38%; height:38%; color:var(--amber); opacity:.9; }
+  .galeria-thumbs{ display:flex; gap:10px; margin-top:12px; }
+  .galeria-thumbs .thumb{
+    width:76px; height:58px; padding:0;
+    background:var(--charcoal-2);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:3px; overflow:hidden; cursor:pointer;
+    opacity:.65; transition:opacity .15s ease, border-color .15s ease;
+  }
+  .galeria-thumbs .thumb:hover{ opacity:1; }
+  .galeria-thumbs .thumb.activa{ border-color:var(--amber); opacity:1; }
+  .galeria-thumbs .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* Columna de información de la ficha */
+  .ficha-info{ padding:32px 32px 32px 6px; }
+  @media (max-width:900px){ .ficha-info{ padding:6px 26px 30px; } }
+  .ficha-cat{
+    display:inline-block;
+    font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:.06em;
+    color:var(--charcoal); background:var(--amber);
+    padding:3px 8px; border-radius:2px; text-transform:uppercase; font-weight:500;
+    margin-bottom:12px;
+  }
+  .ficha-info .model{
+    font-family:'IBM Plex Mono'; font-size:11px; color:var(--amber);
+    letter-spacing:.05em; margin-bottom:4px;
+  }
+  .ficha-info h1{ color:var(--concrete); font-size:clamp(26px,3.4vw,40px); margin-bottom:14px; }
+  .ficha-precio{ margin-bottom:20px; }
+  .ficha-precio .price{ font-size:26px; }
+  .ficha-info .spec-rows{ margin-bottom:22px; }
+  .ficha-descripcion{
+    color:rgba(237,234,226,0.8); font-size:14.5px; line-height:1.65;
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding-top:18px; margin-bottom:26px;
+    white-space:pre-line;
+  }
+  .btn-wa{ width:100%; justify-content:center; padding:15px 22px; font-size:15px; }

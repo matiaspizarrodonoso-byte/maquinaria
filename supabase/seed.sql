@@ -1,0 +1,3 @@
+-- Seed local: datos de prueba para desarrollo local.
+-- Vacío por ahora: la base arranca sin productos. Agregá inserts acá si
+-- querés fixtures para probar el catálogo/admin sin cargar a mano.
