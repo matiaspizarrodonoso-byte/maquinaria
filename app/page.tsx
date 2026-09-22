@@ -11,13 +11,20 @@ import Footer from "@/components/Footer";
 // force-dynamic: el catálogo lee Supabase en cada request, sin caché de Next.
 export const dynamic = "force-dynamic";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string }>;
+}) {
+  // Filtro del catálogo por categoría vía URL (/?cat=Grúas#catalogo).
+  const { cat } = await searchParams;
+
   return (
     <>
       <Header />
       <Hero />
       <Categorias />
-      <Catalogo />
+      <Catalogo categoriaActiva={cat} />
       <PorQue />
       <CtaBand />
       <Footer />

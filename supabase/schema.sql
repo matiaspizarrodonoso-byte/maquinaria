@@ -78,18 +78,27 @@ CREATE TRIGGER trg_limitar_imagenes
 ALTER TABLE productos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE producto_imagenes ENABLE ROW LEVEL SECURITY;
 
--- Lectura pública: solo productos activos
+-- Lectura pública (visitantes anon): solo productos activos
 DROP POLICY IF EXISTS "lectura publica productos activos" ON productos;
 CREATE POLICY "lectura publica productos activos"
   ON productos FOR SELECT
-  TO anon, authenticated
+  TO anon
   USING (activo = 1);
 
--- Lectura pública: solo imágenes de productos activos
+-- Lectura admin (authenticated): todos los productos, activos e inactivos.
+-- Sin esto, UPDATE ... RETURNING falla al pasar activo 1→0 (la fila nueva
+-- también debe pasar la política de SELECT) y el dashboard esconde inactivos.
+DROP POLICY IF EXISTS "admin lee productos" ON productos;
+CREATE POLICY "admin lee productos"
+  ON productos FOR SELECT
+  TO authenticated
+  USING (true);
+
+-- Lectura pública (visitantes anon): solo imágenes de productos activos
 DROP POLICY IF EXISTS "lectura publica imagenes de activos" ON producto_imagenes;
 CREATE POLICY "lectura publica imagenes de activos"
   ON producto_imagenes FOR SELECT
-  TO anon, authenticated
+  TO anon
   USING (
     EXISTS (
       SELECT 1 FROM productos p
@@ -97,6 +106,13 @@ CREATE POLICY "lectura publica imagenes de activos"
         AND p.activo = 1
     )
   );
+
+-- Lectura admin (authenticated): todas las imágenes.
+DROP POLICY IF EXISTS "admin lee imagenes" ON producto_imagenes;
+CREATE POLICY "admin lee imagenes"
+  ON producto_imagenes FOR SELECT
+  TO authenticated
+  USING (true);
 
 -- Escritura: solo usuarios autenticados (admin)
 DROP POLICY IF EXISTS "admin inserta productos" ON productos;

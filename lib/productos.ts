@@ -26,12 +26,13 @@ export type Producto = {
 /**
  * Productos activos (activo = 1) con sus imágenes embebidas.
  * Usa el cliente anon: lectura pública permitida por RLS, sin sesión.
+ * Si se pasa `categoria`, filtra por esa categoría exacta.
  */
-export async function getProductosActivos(): Promise<{
+export async function getProductosActivos(categoria?: string): Promise<{
   productos: Producto[];
   error: string | null;
 }> {
-  const { data, error } = await supabase
+  let query = supabase
     .from("productos")
     .select(
       "id, nombre, descripcion, precio, categoria, anio, potencia, capacidad, alcance, producto_imagenes(url, orden)"
@@ -39,10 +40,29 @@ export async function getProductosActivos(): Promise<{
     .eq("activo", 1)
     .order("id", { ascending: false });
 
+  if (categoria) query = query.eq("categoria", categoria);
+
+  const { data, error } = await query;
+
   if (error) {
     return { productos: [], error: error.message };
   }
   return { productos: (data ?? []) as Producto[], error: null };
+}
+
+/**
+ * Categorías distintas presentes en productos activos (el filtro del catálogo
+ * se arma con los valores existentes, no con una lista fija — roadmap).
+ */
+export async function getCategorias(): Promise<string[]> {
+  const { data } = await supabase
+    .from("productos")
+    .select("categoria")
+    .eq("activo", 1)
+    .not("categoria", "is", null);
+
+  const unicas = new Set((data ?? []).map((d) => d.categoria as string));
+  return [...unicas].sort((a, b) => a.localeCompare(b, "es"));
 }
 
 /**
@@ -62,6 +82,16 @@ export async function getProductoPorId(id: number): Promise<Producto | null> {
   if (error || !data) return null;
   return data as Producto;
 }
+
+/** Categorías fijas del negocio (las del mockup de la landing). El select del
+ * admin las ofrece junto a las que ya existan en la DB. */
+export const CATEGORIAS_BASE = [
+  "Cargadores",
+  "Grúas",
+  "Tractores",
+  "Compactadoras",
+  "Generadores",
+];
 
 /** Imagen de portada (orden = 0); si no existe, la primera; null si no hay fotos. */
 export function imagenPortada(p: Producto): string | null {

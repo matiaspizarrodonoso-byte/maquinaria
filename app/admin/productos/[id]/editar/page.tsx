@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
+import { CATEGORIAS_BASE } from "@/lib/productos";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProductoForm, {
   type ImagenExistente,
@@ -46,13 +47,21 @@ export default async function EditarProductoPage({ params }: Props) {
     nombre: p.nombre,
     descripcion: p.descripcion ?? "",
     precio: p.precio == null ? "" : String(p.precio),
-    categoria: p.categoria ?? "",
     anio: p.anio == null ? "" : String(p.anio),
     potencia: p.potencia ?? "",
     capacidad: p.capacidad ?? "",
     alcance: p.alcance ?? "",
     activo: p.activo === 1,
   };
+
+  // Lista del select: las 5 fijas del negocio + las que ya existan en la DB.
+  const { data: catsData } = await supabase
+    .from("productos")
+    .select("categoria")
+    .not("categoria", "is", null);
+  const categorias = [
+    ...new Set([...CATEGORIAS_BASE, ...(catsData ?? []).map((d) => d.categoria as string)]),
+  ].sort((a, b) => a.localeCompare(b, "es"));
 
   return (
     <>
@@ -63,6 +72,8 @@ export default async function EditarProductoPage({ params }: Props) {
           modo="editar"
           productoId={p.id}
           inicial={inicial}
+          categoriaInicial={p.categoria ?? ""}
+          categorias={categorias}
           imagenesIniciales={p.producto_imagenes}
         />
       </div>

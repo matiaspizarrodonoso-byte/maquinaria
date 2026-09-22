@@ -13,6 +13,7 @@ import {
 
 const MAX_IMAGENES = 3;
 const BUCKET = "productos";
+const OTRA_CATEGORIA = "__otra__";
 
 export type ImagenExistente = { id: number; url: string; orden: number };
 
@@ -20,7 +21,6 @@ export type ProductoFormInicial = {
   nombre: string;
   descripcion: string;
   precio: string;
-  categoria: string;
   anio: string;
   potencia: string;
   capacidad: string;
@@ -40,7 +40,6 @@ const VACIO: ProductoFormInicial = {
   nombre: "",
   descripcion: "",
   precio: "",
-  categoria: "",
   anio: "",
   potencia: "",
   capacidad: "",
@@ -50,23 +49,39 @@ const VACIO: ProductoFormInicial = {
 
 /**
  * Formulario de alta/edición de productos (clases .form-group/.form-row de
- * admin.css). Las imágenes se suben directo a Supabase Storage desde el
- * navegador con la sesión del admin (la policy exige rol authenticated) y la
- * server action solo recibe las URLs finales en orden.
+ * admin.css). La categoría es un select (lista de la DB + las 5 fijas) con
+ * opción "Otra…" para no tipear a mano y evitar errores.
+ * Las imágenes se suben directo a Supabase Storage desde el navegador con la
+ * sesión del admin y la server action solo recibe las URLs finales en orden.
  */
 export default function ProductoForm({
   modo,
   productoId,
   inicial = VACIO,
+  categoriaInicial = "",
+  categorias,
   imagenesIniciales = [],
 }: {
   modo: "nuevo" | "editar";
   productoId?: number;
   inicial?: ProductoFormInicial;
+  categoriaInicial?: string;
+  categorias: string[];
   imagenesIniciales?: ImagenExistente[];
 }) {
   const router = useRouter();
   const [campos, setCampos] = useState<ProductoFormInicial>(inicial);
+
+  const selInicial = !categoriaInicial
+    ? ""
+    : categorias.includes(categoriaInicial)
+      ? categoriaInicial
+      : OTRA_CATEGORIA;
+  const [catSel, setCatSel] = useState(selInicial);
+  const [catOtra, setCatOtra] = useState(
+    selInicial === OTRA_CATEGORIA ? categoriaInicial : ""
+  );
+
   const [imagenes, setImagenes] = useState<ItemImagen[]>(
     imagenesIniciales.map((i) => ({
       key: `db-${i.id}`,
@@ -145,7 +160,10 @@ export default function ProductoForm({
       nombre: campos.nombre.trim(),
       descripcion: campos.descripcion.trim() || null,
       precio: campos.precio === "" ? null : Number(campos.precio),
-      categoria: campos.categoria.trim() || null,
+      categoria:
+        catSel === OTRA_CATEGORIA
+          ? catOtra.trim() || null
+          : catSel || null,
       anio: campos.anio === "" ? null : Number(campos.anio),
       potencia: campos.potencia.trim() || null,
       capacidad: campos.capacidad.trim() || null,
@@ -204,12 +222,27 @@ export default function ProductoForm({
             </div>
             <div className="form-group">
               <label htmlFor="categoria">Categoría</label>
-              <input
+              <select
                 id="categoria"
-                value={campos.categoria}
-                onChange={(e) => setCampo("categoria", e.target.value)}
-                placeholder="Grúas, Cargadores…"
-              />
+                value={catSel}
+                onChange={(e) => setCatSel(e.target.value)}
+              >
+                <option value="">— Sin categoría —</option>
+                {categorias.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+                <option value={OTRA_CATEGORIA}>Otra…</option>
+              </select>
+              {catSel === OTRA_CATEGORIA && (
+                <input
+                  value={catOtra}
+                  onChange={(e) => setCatOtra(e.target.value)}
+                  placeholder="Nueva categoría"
+                  style={{ marginTop: "8px" }}
+                />
+              )}
             </div>
           </div>
 
