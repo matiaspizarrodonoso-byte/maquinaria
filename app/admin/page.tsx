@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin-auth";
-import { formatearPrecio } from "@/lib/productos";
+import { formatearPrecio, imagenPortada, referencia } from "@/lib/productos";
 import AdminHeader from "@/components/admin/AdminHeader";
 import EliminarProductoButton from "@/components/admin/EliminarProductoButton";
 
@@ -69,20 +69,18 @@ export default async function AdminPage() {
               </thead>
               <tbody>
                 {filas.map((p) => {
-                  const portada =
-                    p.producto_imagenes.find((i) => i.orden === 0) ??
-                    p.producto_imagenes[0];
+                  const portada = imagenPortada(p);
                   return (
                     <tr key={p.id}>
                       <td>
                         {portada ? (
                           // eslint-disable-next-line @next/next/no-img-element -- thumb de tabla; next/image no aplica acá.
-                          <img className="table-img" src={portada.url} alt="" />
+                          <img className="table-img" src={portada} alt="" />
                         ) : (
                           <div className="table-img" />
                         )}
                       </td>
-                      <td>REF-{String(p.id).padStart(4, "0")}</td>
+                      <td>{referencia(p)}</td>
                       <td>{p.nombre}</td>
                       <td>{p.categoria ?? "—"}</td>
                       <td>{formatearPrecio(p.precio)}</td>

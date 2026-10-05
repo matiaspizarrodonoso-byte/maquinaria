@@ -189,6 +189,15 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('productos', 'productos', true)
 ON CONFLICT (id) DO NOTHING;
 
+-- Endurecimiento (migración 20260928120000): solo imágenes y máx. 5 MB por
+-- archivo. Es un UPDATE aparte para que sea idempotente sobre buckets ya
+-- creados con el INSERT de arriba.
+UPDATE storage.buckets
+SET
+  allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
+  file_size_limit = 5242880 -- 5 MB
+WHERE id = 'productos';
+
 -- Lectura pública de los objetos del bucket (la landing las sirve sin auth)
 DROP POLICY IF EXISTS "lectura publica bucket productos" ON storage.objects;
 CREATE POLICY "lectura publica bucket productos"

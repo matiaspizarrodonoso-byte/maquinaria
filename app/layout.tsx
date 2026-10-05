@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "../index.css";
 
 export const metadata: Metadata = {
-  title: "Forja — Maquinaria pesada certificada",
+  title: "maq-usos — Maquinaria pesada certificada",
   description:
     "Compra, reparación y venta de maquinaria pesada usada. Equipos reacondicionados en taller propio, con mantenciones al día y garantía por escrito.",
 };

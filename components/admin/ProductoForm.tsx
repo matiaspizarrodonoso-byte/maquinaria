@@ -15,6 +15,11 @@ const MAX_IMAGENES = 3;
 const BUCKET = "productos";
 const OTRA_CATEGORIA = "__otra__";
 
+// Mismos límites que aplica el bucket en servidor (migración
+// 20260928120000_storage_limites): validarlos acá da feedback inmediato.
+const TIPOS_IMAGEN_OK = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const MAX_BYTES_IMAGEN = 5 * 1024 * 1024; // 5 MB
+
 export type ImagenExistente = { id: number; url: string; orden: number };
 
 export type ProductoFormInicial = {
@@ -104,14 +109,23 @@ export default function ProductoForm({
   function agregarImagenes(files: FileList | null) {
     if (!files) return;
     const disponibles = MAX_IMAGENES - imagenes.length;
-    const nuevas = Array.from(files)
-      .slice(0, disponibles)
-      .map((file) => ({
+    const nuevas: ItemImagen[] = [];
+    for (const file of Array.from(files).slice(0, disponibles)) {
+      if (!TIPOS_IMAGEN_OK.includes(file.type)) {
+        setError(`"${file.name}" no es una imagen válida (solo JPG, PNG, WebP o AVIF).`);
+        continue;
+      }
+      if (file.size > MAX_BYTES_IMAGEN) {
+        setError(`"${file.name}" supera el máximo de 5 MB por imagen.`);
+        continue;
+      }
+      nuevas.push({
         key: crypto.randomUUID(),
         file,
         preview: URL.createObjectURL(file),
-      }));
-    setImagenes((arr) => [...arr, ...nuevas]);
+      });
+    }
+    if (nuevas.length > 0) setImagenes((arr) => [...arr, ...nuevas]);
   }
 
   function quitarImagen(item: ItemImagen) {
@@ -359,7 +373,7 @@ export default function ProductoForm({
             {imagenes.length < MAX_IMAGENES && (
               <input
                 type="file"
-                accept="image/*"
+                accept={TIPOS_IMAGEN_OK.join(",")}
                 multiple
                 onChange={(e) => {
                   agregarImagenes(e.target.files);

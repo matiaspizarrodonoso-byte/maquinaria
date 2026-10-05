@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
-import { CATEGORIAS_BASE } from "@/lib/productos";
+import { getCategoriasAdmin, parsearIdProducto, referencia } from "@/lib/productos";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProductoForm, {
   type ImagenExistente,
@@ -29,8 +29,8 @@ export default async function EditarProductoPage({ params }: Props) {
   const supabase = await requireAdmin();
 
   const { id } = await params;
-  const n = Number(id);
-  if (!Number.isInteger(n) || n <= 0) notFound();
+  const n = parsearIdProducto(id);
+  if (!n) notFound();
 
   // Con sesión de admin: se puede editar cualquier producto, activo o no.
   const { data, error } = await supabase
@@ -54,20 +54,13 @@ export default async function EditarProductoPage({ params }: Props) {
     activo: p.activo === 1,
   };
 
-  // Lista del select: las 5 fijas del negocio + las que ya existan en la DB.
-  const { data: catsData } = await supabase
-    .from("productos")
-    .select("categoria")
-    .not("categoria", "is", null);
-  const categorias = [
-    ...new Set([...CATEGORIAS_BASE, ...(catsData ?? []).map((d) => d.categoria as string)]),
-  ].sort((a, b) => a.localeCompare(b, "es"));
+  const categorias = await getCategoriasAdmin(supabase);
 
   return (
     <>
       <AdminHeader />
       <div className="container">
-        <h2 style={{ marginBottom: "20px" }}>Editar producto — REF-{String(p.id).padStart(4, "0")}</h2>
+        <h2 style={{ marginBottom: "20px" }}>Editar producto — {referencia(p)}</h2>
         <ProductoForm
           modo="editar"
           productoId={p.id}

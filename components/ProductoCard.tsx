@@ -1,11 +1,13 @@
 import Link from "next/link";
 import type { Producto } from "@/lib/productos";
 import {
-  formatearPrecio,
   imagenPortada,
   referencia,
+  specsDeProducto,
   urlWhatsApp,
 } from "@/lib/productos";
+import PlaceholderMaquinaria from "@/components/PlaceholderMaquinaria";
+import PrecioProducto from "@/components/PrecioProducto";
 
 const MAX_DESCRIPCION = 110;
 
@@ -21,14 +23,7 @@ function truncar(texto: string, max: number): string {
  */
 export default function ProductoCard({ producto }: { producto: Producto }) {
   const portada = imagenPortada(producto);
-
-  // Solo se muestran las specs que tienen valor (un generador no tiene
-  // "alcance", una grúa sí — roadmap).
-  const specs: { k: string; v: string }[] = [];
-  if (producto.anio != null) specs.push({ k: "Año", v: String(producto.anio) });
-  if (producto.potencia) specs.push({ k: "Potencia", v: producto.potencia });
-  if (producto.capacidad) specs.push({ k: "Capacidad", v: producto.capacidad });
-  if (producto.alcance) specs.push({ k: "Alcance", v: producto.alcance });
+  const specs = specsDeProducto(producto);
 
   return (
     <article className="nameplate">
@@ -39,12 +34,7 @@ export default function ProductoCard({ producto }: { producto: Producto }) {
           // eslint-disable-next-line @next/next/no-img-element -- markup del mockup; next/image cambiaría la estructura y pediría remotePatterns.
           <img src={portada} alt={producto.nombre} />
         ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-            <rect x="3" y="8" width="13" height="8" rx="1" />
-            <path d="M16 11h3l2 3v2h-5" />
-            <circle cx="7" cy="18" r="1.6" />
-            <circle cx="18" cy="18" r="1.6" />
-          </svg>
+          <PlaceholderMaquinaria />
         )}
       </Link>
 
@@ -70,10 +60,7 @@ export default function ProductoCard({ producto }: { producto: Producto }) {
         )}
 
         <div className="foot">
-          <div className="price">
-            {formatearPrecio(producto.precio)}
-            <span>{producto.precio != null ? "CLP" : "precio a convenir"}</span>
-          </div>
+          <PrecioProducto precio={producto.precio} />
           <a className="link-arrow" href={urlWhatsApp(producto)} target="_blank" rel="noopener">
             Consultar →
           </a>

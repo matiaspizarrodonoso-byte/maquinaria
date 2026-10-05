@@ -4,7 +4,7 @@ export default function PorQue() {
       <div className="wrap">
         <div className="section-head">
           <div>
-            <h2>Por qué comprar con Forja</h2>
+            <h2>Por qué comprar con maq-usos</h2>
             <p>Cada equipo pasa por un proceso de verificación antes de salir al catálogo.</p>
           </div>
         </div>
