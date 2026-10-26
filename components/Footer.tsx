@@ -30,7 +30,6 @@ export default function Footer() {
         </div>
         <div className="foot-bottom">
           <span>© 2026 MAQ USO. Todos los derechos reservados.</span>
-          <span>Versión beta del sitio</span>
         </div>
       </div>
     </footer>
