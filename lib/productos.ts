@@ -154,7 +154,7 @@ export function specsDeProducto(p: Producto): { k: string; v: string }[] {
 }
 
 /** Número de WhatsApp del negocio (formato wa.me, sin "+"). Única fuente. */
-export const WHATSAPP_NUMERO = "56933266433";
+export const WHATSAPP_NUMERO = "56975179975";
 
 /** Link wa.me con mensaje pre-armado incluyendo nombre y referencia del equipo. */
 export function urlWhatsApp(p: Producto): string {

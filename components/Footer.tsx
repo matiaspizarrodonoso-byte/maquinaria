@@ -23,7 +23,8 @@ export default function Footer() {
             <h4>Contacto</h4>
             <ul>
               <li>maq.usos@gmail.com</li>
-              <li>Santiago, Chile</li>
+              <li>+56 9 7517 9975</li>
+              <li>Calle Las Vertientes Sitio 2, Paine, Región Metropolitana</li>
             </ul>
           </div>
         </div>
