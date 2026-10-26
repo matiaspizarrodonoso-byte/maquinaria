@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <div className="logo" style={{ marginBottom: "14px" }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- logo provisorio generado. */}
-              <img src="/logo.jpg" alt="maq-usos" style={{ height: "52px" }} />
+              <img src="/logo-maq-uso.png" alt="MAQ USO" style={{ height: "52px" }} />
             </div>
             <p style={{ maxWidth: "280px", fontSize: "13.5px", lineHeight: "1.6" }}>Compra, reparación y venta de maquinaria pesada de segunda mano, con reacondicionamiento en taller propio y garantía.</p>
           </div>
@@ -22,14 +22,14 @@ export default function Footer() {
           <div>
             <h4>Contacto</h4>
             <ul>
-              <li>maq.usos@gmail.com</li>
+              <li>maquso@gmail.com</li>
               <li>+56 9 7517 9975</li>
               <li>Calle Las Vertientes Sitio 2, Paine, Región Metropolitana</li>
             </ul>
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© 2026 maq-usos. Todos los derechos reservados.</span>
+          <span>© 2026 MAQ USO. Todos los derechos reservados.</span>
           <span>Versión beta del sitio</span>
         </div>
       </div>

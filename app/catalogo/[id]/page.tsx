@@ -22,9 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const n = parsearIdProducto(id);
   const producto = n ? await getProductoPorId(n) : null;
-  if (!producto) return { title: "Producto no encontrado — maq-usos" };
+  if (!producto) return { title: "Producto no encontrado — MAQ USO" };
   return {
-    title: `${producto.nombre} — maq-usos`,
+    title: `${producto.nombre} — MAQ USO`,
     description: producto.descripcion ?? undefined,
   };
 }

@@ -7,11 +7,11 @@ export default function AdminHeader() {
     <header className="header">
       <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
         {/* Logo del admin: click vuelve a la página principal. */}
-        <Link href="/" aria-label="maq-usos — volver al sitio">
+        <Link href="/" aria-label="MAQ USO — volver al sitio">
           {/* eslint-disable-next-line @next/next/no-img-element -- logo provisorio generado. */}
           <img
-            src="/logo.jpg"
-            alt="maq-usos"
+            src="/logo-maq-uso.png"
+            alt="MAQ USO"
             style={{ height: "75px", borderRadius: "3px", display: "block" }}
           />
         </Link>

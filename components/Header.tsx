@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Header() {
   // Links absolutos con anchor ("/#catalogo"): funcionan igual en la home
   // (scroll suave vía CSS) y también desde otras páginas como la ficha.
-  // Logo: imagen provisoria (JPG opaco) en public/logo.jpg; la placa con
+  // Logo en public/logo-maq-uso.png; la placa con
   // borde fino la estiliza .logo img en index.css.
   return (
     <header>
@@ -13,8 +13,8 @@ export default function Header() {
         <Link href="/#top" className="logo">
                   {/* eslint-disable-next-line @next/next/no-img-element -- logo provisorio generado. */}
         <img
-          src="/logo.jpg"
-          alt="maq-usos"
+          src="/logo-maq-uso.png"
+          alt="MAQ USO"
           style={{ height: "75px", display: "block" }}
         />
         </Link>

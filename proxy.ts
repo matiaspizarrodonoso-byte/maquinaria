@@ -44,7 +44,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Todo excepto assets estáticos e imágenes públicas (logo.jpg, icon.jpg).
+    // Todo excepto assets estáticos e imágenes públicas (logo-maq-uso.png, icon.png).
     "/((?!_next/static|_next/image|.*\\.(?:svg|jpg|jpeg|png|webp|gif|ico)$).*)",
   ],
 };

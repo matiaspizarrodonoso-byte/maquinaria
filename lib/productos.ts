@@ -158,6 +158,6 @@ export const WHATSAPP_NUMERO = "56975179975";
 
 /** Link wa.me con mensaje pre-armado incluyendo nombre y referencia del equipo. */
 export function urlWhatsApp(p: Producto): string {
-  const mensaje = `Hola, vi el ${p.nombre} (${referencia(p)}) en el catálogo de maq-usos y me interesa. ¿Sigue disponible?`;
+  const mensaje = `Hola, vi el ${p.nombre} (${referencia(p)}) en el catálogo de MAQ USO y me interesa. ¿Sigue disponible?`;
   return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
 }
