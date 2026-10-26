@@ -23,7 +23,7 @@ export default function Footer() {
             <h4>Contacto</h4>
             <ul>
               <li>maquso@gmail.com</li>
-              <li>+56 9 7517 9975</li>
+              <li>+56 9 7515 9975</li>
               <li>Calle Las Vertientes Sitio 2, Paine, Región Metropolitana</li>
             </ul>
           </div>
